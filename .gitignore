@@ -94,7 +94,7 @@ ipython_config.py
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 
-# Celery stuff
+# Celery stuff.
 celerybeat-schedule
 celerybeat.pid
 
@@ -110,11 +110,11 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
+# Spyder project note
 .spyderproject
 .spyproject
 
-# Rope project settings
+# Rope project note
 .ropeproject
 
 # mkdocs documentation
@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# JetBrains PyCharm related.
+.idea/
+
+# Visual Studio Code related.
+.vscode/
+
+# Temp Glade files.
+*.glade~
