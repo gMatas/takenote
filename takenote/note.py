@@ -1,5 +1,7 @@
 import enum
 
+from pkg_resources import resource_filename
+
 from takenote.resources.ui import UIResource
 from takenote.gi_repository import Gtk, Gdk
 
@@ -108,8 +110,8 @@ class NoteHandler:
 class Note:
 
     def __init__(self):
-        note_ui_filepath = UIResource.NOTE.get_filepath()
-        builder = Gtk.Builder.new_from_file(note_ui_filepath)
+        ui_filepath = resource_filename('takenote.resources.ui', 'note.glade')
+        builder = Gtk.Builder.new_from_file(ui_filepath)
 
         handler = NoteHandler(builder)
         builder.connect_signals(handler)

@@ -5,5 +5,5 @@ from takenote.gi_repository import Gtk
 class Settings:
 
     def __init__(self):
-        ui_filepath = UIResource.SETTINGS.get_filepath()
+        ui_filepath = resource_filename('takenote.resources.ui', 'settings.glade')
         builder = Gtk.Builder.new_from_file(ui_filepath)
