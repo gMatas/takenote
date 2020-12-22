@@ -2,8 +2,11 @@ import enum
 
 from pkg_resources import resource_filename
 
-from takenote.resources.ui import UIResource
-from takenote.gi_repository import Gtk, Gdk
+from takenote.gi_repository import GIRepository
+
+
+Gdk = GIRepository.Gdk.load_binding()
+Gtk = GIRepository.Gtk.load_binding()
 
 
 class NotePinMode(enum.Enum):
@@ -71,9 +74,9 @@ class NoteHandler:
     def on_pin_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning(window)
 
-        self._resize_button.set_sensitive(not self._ispinned)
         self._move_button.set_sensitive(not self._ispinned)
 
+        self._resize_button.set_visible(not self._ispinned)
         self._mode_button.set_visible(self._ispinned)
 
     def on_new_button_clicked(self, button: Gtk.Button):
@@ -120,3 +123,8 @@ class Note:
 
     def show(self):
         self._window.show()
+
+
+if __name__ == '__main__':
+    Note().show()
+    Gtk.main()
