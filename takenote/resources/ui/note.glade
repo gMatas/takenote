@@ -22,11 +22,18 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkButton" id="lock_button">
-                <property name="label" translatable="yes">lock</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="relief">none</property>
                 <property name="image_position">right</property>
+                <child>
+                  <object class="GtkImage" id="lock_button_icon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">../icons/lock-24px.svg</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -36,11 +43,18 @@
             </child>
             <child>
               <object class="GtkButton" id="move_button">
-                <property name="label" translatable="yes">move</property>
+                <property name="width_request">100</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
+                <property name="focus_on_click">False</property>
                 <property name="receives_default">True</property>
+                <property name="opacity">0</property>
+                <property name="hexpand">False</property>
+                <property name="relief">none</property>
                 <signal name="button-press-event" handler="on_move_button_press_event" object="note_window" swapped="no"/>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -50,11 +64,18 @@
             </child>
             <child>
               <object class="GtkButton" id="mode_button">
-                <property name="label" translatable="yes">mode</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="relief">none</property>
                 <signal name="clicked" handler="on_mode_button_clicked" object="note_window" swapped="no"/>
+                <child>
+                  <object class="GtkImage" id="mode_button_icon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">../icons/flip_to_front-24px.svg</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -64,11 +85,18 @@
             </child>
             <child>
               <object class="GtkButton" id="pin_button">
-                <property name="label" translatable="yes">pin</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="relief">none</property>
                 <signal name="clicked" handler="on_pin_button_clicked" object="note_window" swapped="no"/>
+                <child>
+                  <object class="GtkImage" id="pin_button_icon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">../icons/push_pin-24px.svg</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -78,11 +106,18 @@
             </child>
             <child>
               <object class="GtkButton" id="more_button">
-                <property name="label" translatable="yes">more</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="relief">none</property>
                 <signal name="clicked" handler="on_more_button_clicked" object="more_popovermenu" after="yes" swapped="no"/>
+                <child>
+                  <object class="GtkImage" id="more_button_icon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">../icons/more_vert-24px.svg</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -114,14 +149,22 @@
         </child>
         <child>
           <object class="GtkButton" id="resize_button">
-            <property name="label" translatable="yes">resize</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="halign">end</property>
             <property name="valign">end</property>
+            <property name="relief">none</property>
             <property name="image_position">top</property>
+            <property name="always_show_image">True</property>
             <signal name="button-press-event" handler="on_resize_button_press_event" object="note_window" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">view-fullscreen-symbolic</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
