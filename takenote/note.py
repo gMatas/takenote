@@ -3,6 +3,7 @@ import enum
 from pkg_resources import resource_filename
 
 from takenote.gi_repository import GIRepository
+from takenote.resources.ui import UIResource
 
 
 Gdk = GIRepository.Gdk.load_binding()
@@ -113,7 +114,7 @@ class NoteHandler:
 class Note:
 
     def __init__(self):
-        ui_filepath = resource_filename('takenote.resources.ui', 'note.glade')
+        ui_filepath = UIResource.NOTE_WINDOW.get_filename()
         builder = Gtk.Builder.new_from_file(ui_filepath)
 
         handler = NoteHandler(builder)
@@ -121,10 +122,14 @@ class Note:
 
         self._window: Gtk.Window = builder.get_object('note_window')
 
+    @classmethod
+    def show_window(cls):
+        cls().show()
+
     def show(self):
-        self._window.show()
+        return self._window.show()
 
 
 if __name__ == '__main__':
-    Note().show()
+    Note.show_window()
     Gtk.main()
