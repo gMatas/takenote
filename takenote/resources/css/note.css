@@ -1,0 +1,27 @@
+/*
+You can type here any CSS rule recognized by GTK+.
+You can temporarily disable this custom CSS by clicking on the “Pause” button above.
+
+Changes are applied instantly and globally, for the whole application.
+*/
+
+window, textview, text {
+  background-color: yellow;
+}
+
+button {
+  background-image: none;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: rgba(0,0,0,0.2);
+  background-blend-mode: multiply;
+}
+
+button:hover:active {
+  background-color: rgba(0,0,0,0.4);
+  background-blend-mode: multiply;
+}
