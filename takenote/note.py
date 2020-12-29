@@ -1,13 +1,48 @@
+from dataclasses import dataclass
 import enum
-
-from pkg_resources import resource_filename
+from typing import List
 
 from takenote.gi_repository import GIRepository
+from takenote.resources.css import CSSResource
 from takenote.resources.ui import UIResource
 
 
+# Linter friendly GI bindings.
 Gdk = GIRepository.Gdk.load_binding()
 Gtk = GIRepository.Gtk.load_binding()
+
+
+@dataclass(frozen=True)
+class NoteUI:
+
+    note_window: Gtk.Window
+    text_view: Gtk.TextView
+    lock_button: Gtk.Button
+    move_button: Gtk.Button
+    mode_button: Gtk.Button
+    pin_button: Gtk.Button
+    more_button: Gtk.Button
+    resize_eventbox: Gtk.EventBox
+
+    @classmethod
+    def from_builder(cls, builder: Gtk.Builder):
+        kwargs = {
+            name: builder.get_object(name)
+            for name in cls.__annotations__.keys()
+            if not name.startswith('_')
+        }
+
+        note_ui = cls(**kwargs)
+        return note_ui
+
+    def set_style(self, provider: Gtk.CssProvider):
+        widgets: List[Gtk.Widget] = [
+            value for key, value in self.__dict__.items()
+            if not key.startswith('_')
+        ]
+        for wgt in widgets:
+            style_context = wgt.get_style_context()
+            style_context.add_provider(provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
 
 class NotePinMode(enum.Enum):
@@ -26,24 +61,17 @@ class NoteHandler:
 
     def __init__(
             self,
-            builder: Gtk.Builder,
+            ui: NoteUI,
             ispinned: bool = False,
             pinmode: NotePinMode = NotePinMode.ABOVE
     ):
+        self._ui = ui
         self._ispinned = ispinned
         self._pinmode = pinmode
 
-        self._resize_button: Gtk.Button = builder.get_object('resize_button')
-        self._move_button: Gtk.Button = builder.get_object('move_button')
-        self._pin_button: Gtk.Button = builder.get_object('pin_button')
-        self._mode_button: Gtk.Button = builder.get_object('mode_button')
+        self._ui.mode_button.set_visible(self._ispinned)
 
-        self._mode_button.set_visible(self._ispinned)
-
-    def on_close_button_clicked(self, window: Gtk.Window):
-        window.close()
-
-    def on_resize_button_press_event(self, window: Gtk.Window, eventbutton: Gdk.EventButton):
+    def on_resize_eventbox_press_event(self, window: Gtk.Window, eventbutton: Gdk.EventButton):
         if self._ispinned:
             return
 
@@ -69,18 +97,24 @@ class NoteHandler:
     def on_mode_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning_mode(window)
 
-    def on_more_button_clicked(self, popovermenu: Gtk.PopoverMenu):
-        popovermenu.popup()
-
     def on_pin_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning(window)
 
-        self._move_button.set_sensitive(not self._ispinned)
+        self._ui.move_button.set_sensitive(not self._ispinned)
 
-        self._resize_button.set_visible(not self._ispinned)
-        self._mode_button.set_visible(self._ispinned)
+        self._ui.resize_eventbox.set_visible(not self._ispinned)
+        self._ui.mode_button.set_visible(self._ispinned)
 
-    def on_new_button_clicked(self, button: Gtk.Button):
+    @staticmethod
+    def on_close_button_clicked(window: Gtk.Window):
+        window.close()
+
+    @staticmethod
+    def on_more_button_clicked(popovermenu: Gtk.PopoverMenu):
+        popovermenu.popup()
+
+    @staticmethod
+    def on_new_button_clicked(button: Gtk.Button):
         note = Note()
         note.show()
 
@@ -98,7 +132,7 @@ class NoteHandler:
         self._ispinned = not self._ispinned
 
     def _toggle_pinning_mode(self, window: Gtk.Window):
-        # Toggle pinning mode between ``ABOVE`` and ``BELOW`` options.
+        # Toggle pinning mode.
         self._pinmode = (
             NotePinMode.BELOW
             if self._pinmode == NotePinMode.ABOVE
@@ -114,20 +148,24 @@ class NoteHandler:
 class Note:
 
     def __init__(self):
-        ui_filepath = UIResource.NOTE_WINDOW.get_filename()
-        builder = Gtk.Builder.new_from_file(ui_filepath)
+        builder = Gtk.Builder.new_from_file(UIResource.NOTE_WINDOW.get_filename())
 
-        handler = NoteHandler(builder)
+        style_provider = Gtk.CssProvider.new()
+        style_provider.load_from_path(CSSResource.NOTE_STYLE.get_filename())
+        ui = NoteUI.from_builder(builder)
+        ui.set_style(style_provider)
+
+        handler = NoteHandler(ui)
         builder.connect_signals(handler)
 
-        self._window: Gtk.Window = builder.get_object('note_window')
+        self._ui = ui
 
     @classmethod
     def show_window(cls):
         cls().show()
 
     def show(self):
-        return self._window.show()
+        return self._ui.note_window.show()
 
 
 if __name__ == '__main__':

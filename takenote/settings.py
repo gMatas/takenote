@@ -1,5 +1,3 @@
-from pkg_resources import resource_filename
-
 from takenote.gi_repository import GIRepository
 from takenote.resources.ui import UIResource
 
