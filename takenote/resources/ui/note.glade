@@ -3,7 +3,7 @@
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="note_window">
-    <property name="name">note</property>
+    <property name="name">note_window</property>
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
     <property name="type_hint">utility</property>
@@ -12,23 +12,28 @@
     <property name="decorated">False</property>
     <property name="deletable">False</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="main_box">
+        <property name="name">main_box</property>
         <property name="visible">True</property>
+        <property name="app_paintable">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="header_box">
+            <property name="name">header_box</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
               <object class="GtkButton" id="lock_button">
+                <property name="name">lock_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="relief">none</property>
                 <property name="image_position">right</property>
                 <child>
                   <object class="GtkImage" id="lock_button_icon">
+                    <property name="name">lock_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixbuf">../icons/lock-24px.svg</property>
@@ -38,11 +43,13 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="padding">2</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="move_button">
+                <property name="name">move_button</property>
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -64,13 +71,15 @@
             </child>
             <child>
               <object class="GtkButton" id="mode_button">
+                <property name="name">mode_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_mode_button_clicked" object="note_window" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="mode_button_icon">
+                    <property name="name">mode_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixbuf">../icons/flip_to_front-24px.svg</property>
@@ -80,18 +89,21 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="padding">2</property>
                 <property name="position">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="pin_button">
+                <property name="name">pin_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_pin_button_clicked" object="note_window" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="pin_button_icon">
+                    <property name="name">pin_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixbuf">../icons/push_pin-24px.svg</property>
@@ -101,18 +113,21 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="padding">2</property>
                 <property name="position">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="more_button">
+                <property name="name">more_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_more_button_clicked" object="more_popovermenu" after="yes" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="more_button_icon">
+                    <property name="name">more_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixbuf">../icons/more_vert-24px.svg</property>
@@ -122,6 +137,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="padding">2</property>
                 <property name="position">4</property>
               </packing>
             </child>
@@ -129,16 +145,19 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
+            <property name="padding">2</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkTextView">
+          <object class="GtkTextView" id="text_view">
+            <property name="name">text_view</property>
             <property name="width_request">100</property>
             <property name="height_request">100</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">8</property>
+            <property name="margin_start">8</property>
+            <property name="margin_end">8</property>
             <property name="wrap_mode">word</property>
           </object>
           <packing>
@@ -148,27 +167,48 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="resize_button">
+          <object class="GtkBox" id="footer_box">
+            <property name="name">footer_box</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">end</property>
-            <property name="valign">end</property>
-            <property name="relief">none</property>
-            <property name="image_position">top</property>
-            <property name="always_show_image">True</property>
-            <signal name="button-press-event" handler="on_resize_button_press_event" object="note_window" swapped="no"/>
+            <property name="can_focus">False</property>
             <child>
-              <object class="GtkImage">
+              <placeholder/>
+            </child>
+            <child>
+              <object class="GtkEventBox" id="resize_eventbox">
+                <property name="name">resize_eventbox</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon_name">view-fullscreen-symbolic</property>
+                <property name="halign">end</property>
+                <property name="valign">end</property>
+                <property name="above_child">True</property>
+                <signal name="button-press-event" handler="on_resize_eventbox_press_event" object="note_window" swapped="no"/>
+                <child>
+                  <object class="GtkImage" id="resize_icon">
+                    <property name="name">resize_icon</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_start">2</property>
+                    <property name="margin_end">2</property>
+                    <property name="margin_top">2</property>
+                    <property name="margin_bottom">2</property>
+                    <property name="pixbuf">../icons/corner.svg</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="padding">2</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
+            <property name="padding">2</property>
             <property name="position">2</property>
           </packing>
         </child>
