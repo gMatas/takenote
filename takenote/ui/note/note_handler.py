@@ -94,7 +94,6 @@ class NoteUIHandler:
 
         style_provider = Gtk.CssProvider.new()
         style_provider.load_from_path(CSSResource.NOTE_STYLE.get_filename())
-
         ui = NoteUI.from_builder(builder)
         ui.set_style(style_provider)
 
