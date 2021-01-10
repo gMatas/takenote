@@ -134,5 +134,5 @@ dmypy.json
 # Visual Studio Code related.
 .vscode/
 
-# Temp Glade files.
+# Glade files.
 *.glade~
