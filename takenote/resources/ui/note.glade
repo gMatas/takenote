@@ -150,8 +150,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="text_view">
-            <property name="name">text_view</property>
+          <object class="GtkTextView" id="note_textview">
+            <property name="name">note_textview</property>
             <property name="width_request">100</property>
             <property name="height_request">100</property>
             <property name="visible">True</property>
@@ -159,6 +159,7 @@
             <property name="margin_start">8</property>
             <property name="margin_end">8</property>
             <property name="wrap_mode">word</property>
+            <signal name="focus-out-event" handler="on_note_textview_focus_out_event" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>

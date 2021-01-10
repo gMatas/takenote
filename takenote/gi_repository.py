@@ -7,9 +7,9 @@ import gi
 
 class GIRepository(enum.Enum):
 
-    AppIndicator3 = '0.1'
-    Gdk = '3.0'
-    Gtk = '3.0'
+    AppIndicator3 = "0.1"
+    Gdk = "3.0"
+    Gtk = "3.0"
 
     def __new__(cls, version: str):
         obj = object.__new__(cls)
@@ -20,8 +20,8 @@ class GIRepository(enum.Enum):
         gi.require_version(self.name, version)
 
     def __repr__(self) -> str:
-        return '<%s.%s>' % (self.__class__.__name__, self.name)
+        return f"<{self.__class__.__name__}.{self.name}>"
 
     def load_binding(self) -> Any:
-        binding = importlib.import_module(f'gi.repository.{self.name}')
+        binding = importlib.import_module(f"gi.repository.{self.name}")
         return binding
