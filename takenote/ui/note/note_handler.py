@@ -5,12 +5,11 @@ from takenote.resources.ui import UIResource
 from takenote.ui.note.note_pin_mode import NotePinMode
 from takenote.ui.note.note_ui import NoteUI
 
-
 Gdk = GIRepository.Gdk.load_binding()
 Gtk = GIRepository.Gtk.load_binding()
 
 
-class NoteUIHandler:
+class NoteHandler:
 
     DEFAULT_PINMODE = NotePinMode.ABOVE
 
@@ -19,19 +18,21 @@ class NoteUIHandler:
             ui: NoteUI,
             notes: NotesCollection,
             note_uuid: str,
-            pinmode: NotePinMode = NotePinMode.NONE
     ):
         self._ui = ui
         self._note = notes.get_note(note_uuid)
         self._notes = notes
-        self._pinmode = pinmode
 
+        # Load note UI with its text content.
         self._text_buffer: Gtk.TextBuffer = self._ui.note_textview.get_buffer()
+        self._text_buffer.set_text(
+            self._note.content, 
+            len(self._note.content.encode('utf-8')))
 
-        self._ui.mode_button.set_visible(self._pinmode.ispinned)
+        self._ui.mode_button.set_visible(self._note.pinmode.ispinned)
 
-    def on_resize_eventbox_press_event(self, window: Gtk.Window, eventbutton: Gdk.EventButton):
-        if self._pinmode.ispinned:
+    def on_resize_eventbox_button_press_event(self, window: Gtk.Window, eventbutton: Gdk.EventButton):
+        if self._note.pinmode.ispinned:
             return
 
         window.begin_resize_drag(
@@ -42,8 +43,8 @@ class NoteUIHandler:
             eventbutton.time
         )
 
-    def on_move_button_press_event(self, window: Gtk.Window, eventbutton: Gdk.EventButton):
-        if self._pinmode.ispinned:
+    def on_move_button_button_press_event(self, window: Gtk.Window, eventbutton: Gdk.EventButton):
+        if self._note.pinmode.ispinned:
             return
 
         window.begin_move_drag(
@@ -59,10 +60,10 @@ class NoteUIHandler:
     def on_pin_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning(window)
 
-        self._ui.move_button.set_sensitive(not self._pinmode.ispinned)
+        self._ui.move_button.set_sensitive(not self._note.pinmode.ispinned)
 
-        self._ui.resize_eventbox.set_visible(not self._pinmode.ispinned)
-        self._ui.mode_button.set_visible(self._pinmode.ispinned)
+        self._ui.resize_eventbox.set_visible(not self._note.pinmode.ispinned)
+        self._ui.mode_button.set_visible(self._note.pinmode.ispinned)
 
     def on_note_textview_focus_out_event(self, widget: Gtk.Widget, event: Gdk.EventFocus):
         text = self._text_buffer.get_text(
@@ -72,12 +73,13 @@ class NoteUIHandler:
         )
 
         self._note.content = text
-        self._note.pinmode = self._pinmode
+        self._note.pinmode = self._note.pinmode
         self._note.save()
 
     def on_new_button_clicked(self, button: Gtk.Button):
         note = self._notes.add_note()
-        ui = NoteUIHandler.create_ui(self._notes, note.uuid)
+        NoteHandler.attach_ui(self._notes, note.uuid)
+        ui = self._notes.get_note_ui(note.uuid)
         ui.show()
 
     def on_close_button_clicked(self, window: Gtk.Window):
@@ -89,7 +91,7 @@ class NoteUIHandler:
         popovermenu.popup()
 
     @staticmethod
-    def create_ui(notes: NotesCollection, note_uuid: str) -> NoteUI:
+    def attach_ui(notes: NotesCollection, note_uuid: str):
         builder = Gtk.Builder.new_from_file(UIResource.NOTE_WINDOW.get_filename())
 
         style_provider = Gtk.CssProvider.new()
@@ -98,31 +100,30 @@ class NoteUIHandler:
         ui.set_style(style_provider)
 
         note = notes.get_note(note_uuid)
-        handler = NoteUIHandler(ui, notes, note.uuid)
+        notes.set_note_ui(note.uuid, ui)
+        handler = NoteHandler(ui, notes, note.uuid)
 
         builder.connect_signals(handler)
 
-        return ui
-
     def _toggle_pinning(self, window: Gtk.Window):
-        self._pinmode = (
+        self._note.pinmode = (
             NotePinMode.NONE
-            if self._pinmode.ispinned
-            else NoteUIHandler.DEFAULT_PINMODE
+            if self._note.pinmode.ispinned
+            else NoteHandler.DEFAULT_PINMODE
         )
 
-        type_hint = self._pinmode.gtk_window_typehint
+        type_hint = self._note.pinmode.gtk_window_typehint
         window.set_type_hint(type_hint)
 
     def _toggle_pinning_mode(self, window: Gtk.Window):
         # Toggle pinning mode.
-        self._pinmode = (
+        self._note.pinmode = (
             NotePinMode.BELOW
-            if self._pinmode == NotePinMode.ABOVE
+            if self._note.pinmode == NotePinMode.ABOVE
             else NotePinMode.ABOVE
         )
 
         # Apply new pinning mode.
-        if self._pinmode.ispinned:
-            type_hint = self._pinmode.gtk_window_typehint
+        if self._note.pinmode.ispinned:
+            type_hint = self._note.pinmode.gtk_window_typehint
             window.set_type_hint(type_hint)

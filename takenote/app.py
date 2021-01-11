@@ -6,7 +6,6 @@ from takenote.gi_repository import GIRepository
 from takenote.notes_collection import NotesCollection
 from takenote.ui.indicator import create_indicator
 
-
 AppIndicator3 = GIRepository.AppIndicator3.load_binding()
 Gtk = GIRepository.Gtk.load_binding()
 

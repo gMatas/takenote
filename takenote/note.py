@@ -1,5 +1,5 @@
+from typing import Any, Callable, Dict, Optional
 from uuid import uuid4
-from typing import Any, Dict, Callable, Optional
 
 from takenote.ui.note.note_pin_mode import NotePinMode
 
@@ -77,7 +77,6 @@ class Note:
             uuid=str(uuid4()),
             content="",
             pinmode=NotePinMode.NONE,
-            save_required=True
         )
 
         return note
