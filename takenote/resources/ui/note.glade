@@ -58,7 +58,7 @@
                 <property name="opacity">0</property>
                 <property name="hexpand">False</property>
                 <property name="relief">none</property>
-                <signal name="button-press-event" handler="on_move_button_press_event" object="note_window" swapped="no"/>
+                <signal name="button-press-event" handler="on_move_button_button_press_event" object="note_window" swapped="no"/>
                 <child>
                   <placeholder/>
                 </child>
@@ -183,7 +183,7 @@
                 <property name="halign">end</property>
                 <property name="valign">end</property>
                 <property name="above_child">True</property>
-                <signal name="button-press-event" handler="on_resize_eventbox_press_event" object="note_window" swapped="no"/>
+                <signal name="button-press-event" handler="on_resize_eventbox_button_press_event" object="note_window" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="resize_icon">
                     <property name="name">resize_icon</property>
