@@ -23,6 +23,9 @@ class NoteHandler:
         self._note = notes.get_note(note_uuid)
         self._notes = notes
 
+        self._ui.move_window(self._note.position)
+        self._ui.resize_window(self._note.size)
+
         # Load note UI with its text content.
         self._text_buffer: Gtk.TextBuffer = self._ui.note_textview.get_buffer()
         self._text_buffer.set_text(
@@ -72,17 +75,22 @@ class NoteHandler:
             include_hidden_chars=False
         )
 
+        root_x, root_y = self._ui.note_window.get_position()
+        width, height = self._ui.note_window.get_size()
+
         self._note.content = text
         self._note.pinmode = self._note.pinmode
+        self._note.set_position(root_x, root_y)
+        self._note.set_size(height, width)
         self._note.save()
 
     def on_new_button_clicked(self, button: Gtk.Button):
         note = self._notes.add_note()
-        NoteHandler.attach_ui(self._notes, note.uuid)
-        ui = self._notes.get_note_ui(note.uuid)
+        ui = NoteHandler.attach_ui(self._notes, note.uuid)
         ui.show()
 
     def on_close_button_clicked(self, window: Gtk.Window):
+        self._notes.set_note_ui(self._note.uuid, None)
         self._note.save()
         window.close()
 
@@ -91,7 +99,7 @@ class NoteHandler:
         popovermenu.popup()
 
     @staticmethod
-    def attach_ui(notes: NotesCollection, note_uuid: str):
+    def attach_ui(notes: NotesCollection, note_uuid: str) -> NoteUI:
         builder = Gtk.Builder.new_from_file(UIResource.NOTE_WINDOW.get_filename())
 
         style_provider = Gtk.CssProvider.new()
@@ -101,9 +109,12 @@ class NoteHandler:
 
         note = notes.get_note(note_uuid)
         notes.set_note_ui(note.uuid, ui)
+
         handler = NoteHandler(ui, notes, note.uuid)
 
         builder.connect_signals(handler)
+
+        return ui
 
     def _toggle_pinning(self, window: Gtk.Window):
         self._note.pinmode = (

@@ -26,7 +26,7 @@ def create_indicator(indicator_id: str, notes: NotesCollection):
 
     indicator = AppIndicator3.Indicator.new(
         indicator_id,
-        "whatever",
+        "note",
         AppIndicator3.IndicatorCategory.APPLICATION_STATUS
     )
 
@@ -49,8 +49,10 @@ def create_indicator(indicator_id: str, notes: NotesCollection):
 
 
 def _show_note_ui(notes: NotesCollection, note_uuid: str):
-    NoteHandler.attach_ui(notes, note_uuid)
-    note_ui = notes.get_note_ui(note_uuid)
+    if notes.get_note_ui(note_uuid):
+        return
+    
+    note_ui = NoteHandler.attach_ui(notes, note_uuid)
     note_ui.show()
 
 
