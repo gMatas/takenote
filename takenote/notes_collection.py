@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, List, Optional
 
 from takenote.constants import NOTES_DATA_PATH
 from takenote.note import Note
@@ -13,7 +13,7 @@ class NotesCollection:
         self._uis: Dict[str, NoteUI] = {}
 
     @property
-    def uuids(self) -> Tuple[str]:
+    def uuids(self) -> List[str]:
         return self._notes.keys()
 
     @property
@@ -23,8 +23,8 @@ class NotesCollection:
     def get_note(self, uuid: str) -> Note:
         return self._notes[uuid]
 
-    def get_note_ui(self, uuid: str) -> NoteUI:
-        return self._uis[uuid]
+    def get_note_ui(self, uuid: str) -> Optional[NoteUI]:
+        return self._uis.get(uuid)
 
     def add_note(self, note: Note = None) -> Note:
         note = note or Note.new()
@@ -39,10 +39,15 @@ class NotesCollection:
 
         return note
 
-    def set_note_ui(self, note_uuid: str, note_ui: NoteUI):
+    def set_note_ui(self, note_uuid: str, note_ui: Optional[NoteUI]):
         if note_uuid not in self._notes:
             raise KeyError("Collection does not contain a note with the given UUID.")
-            
+
+        if note_ui:
+            note = self.get_note(note_uuid)
+            note.position = note.position or note_ui.get_window_position()
+            note.size = note.size or note_ui.get_window_size()
+
         self._uis[note_uuid] = note_ui
 
     def save(self, path: str):
@@ -59,12 +64,13 @@ class NotesCollection:
 
     @classmethod
     def load(cls, path: str) -> "NotesCollection":
+        # TODO: Handle corrupted file case.
         data = read_json(path)
         notes = cls.from_dict(data)
         return notes
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "NotesCollection":
+    def from_dict(cls, data: Dict[str, Any]) -> "NotesCollection":
         notes = cls()
         for note_data in data["notes"]:
             note = Note.from_dict(note_data)

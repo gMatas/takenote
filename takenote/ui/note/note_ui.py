@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from takenote.gi_repository import GIRepository
+from takenote.utils import Position, Size
 
 Gdk = GIRepository.Gdk.load_binding()
 Gtk = GIRepository.Gtk.load_binding()
@@ -29,6 +30,22 @@ class NoteUI:
 
         ui = cls(**kwargs)
         return ui
+
+    def get_window_position(self) -> Position:
+        gtk_position = self.note_window.get_position()
+        position = Position(gtk_position.root_x, gtk_position.root_y)
+        return position
+
+    def get_window_size(self) -> Size:
+        gtk_size = self.note_window.get_size()
+        size = Size(gtk_size.width, gtk_size.height)
+        return size
+
+    def move_window(self, position: Position):
+        self.note_window.move(position.x, position.y)
+
+    def resize_window(self, size: Size):
+        self.note_window.resize(size.height, size.width)
 
     def set_style(self, provider: Gtk.CssProvider):
         widgets: List[Gtk.Widget] = [
