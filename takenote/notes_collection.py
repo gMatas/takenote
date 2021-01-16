@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from takenote.constants import NOTES_DATA_PATH
 from takenote.note import Note
@@ -43,12 +43,18 @@ class NotesCollection:
         if note_uuid not in self._notes:
             raise KeyError("Collection does not contain a note with the given UUID.")
 
-        if note_ui:
-            note = self.get_note(note_uuid)
-            note.position = note.position or note_ui.get_window_position()
-            note.size = note.size or note_ui.get_window_size()
+        if not note_ui:
+            self._uis.pop(note_uuid, None)
+            return
 
+        note = self.get_note(note_uuid)
+        note.position = note.position or note_ui.get_window_position()
+        note.size = note.size or note_ui.get_window_size()
         self._uis[note_uuid] = note_ui
+
+    def remove_note(self, note_uuid: str) -> Tuple[Note, NoteUI]:
+        self._notes.pop(note_uuid, None)
+        self._uis.pop(note_uuid, None)
 
     def save(self, path: str):
         if not self.save_required:
