@@ -89,6 +89,10 @@ class NoteHandler:
         ui = NoteHandler.attach_ui(self._notes, note.uuid)
         ui.show()
 
+    def on_delete_button_clicked(self, window: Gtk.Window):
+        self._notes.remove_note(self._note.uuid)
+        window.close()
+
     def on_close_button_clicked(self, window: Gtk.Window):
         self._notes.set_note_ui(self._note.uuid, None)
         self._note.save()

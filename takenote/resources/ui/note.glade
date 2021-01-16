@@ -257,6 +257,20 @@
           </packing>
         </child>
         <child>
+          <object class="GtkModelButton" id="delete_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">Delete</property>
+            <signal name="clicked" handler="on_delete_button_clicked" object="note_window" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkModelButton" id="close_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
