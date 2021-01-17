@@ -10,7 +10,7 @@ class NotePinMode(enum.Enum):
 
     ABOVE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.DOCK
     BELOW: Gdk.WindowTypeHint = Gdk.WindowTypeHint.DESKTOP
-    NONE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.UTILITY
+    NONE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.NORMAL
 
     @property
     def ispinned(self) -> bool:
