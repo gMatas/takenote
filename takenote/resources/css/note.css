@@ -5,8 +5,12 @@ You can temporarily disable this custom CSS by clicking on the “Pause” butto
 Changes are applied instantly and globally, for the whole application.
 */
 
-window, textview, text {
+window, text {
   background-color: yellow;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  caret-color: darkslategray;
 }
 
 button {

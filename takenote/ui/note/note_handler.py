@@ -95,16 +95,17 @@ class NoteHandler:
     def attach_ui(notes: NotesCollection, note_uuid: str) -> NoteUI:
         builder = Gtk.Builder.new_from_file(UIResource.NOTE_WINDOW.get_filename())
 
+        note = notes.get_note(note_uuid)
+        css_string = note._style.fill_css_template(
+            CSSResource.TEMPLATE_NOTE_STYLE.get_filename())
+
         style_provider = Gtk.CssProvider.new()
-        style_provider.load_from_path(CSSResource.NOTE_STYLE.get_filename())
+        style_provider.load_from_data(css_string.encode("utf-8"))
         ui = NoteUI.from_builder(builder)
         ui.set_style(style_provider)
-
-        note = notes.get_note(note_uuid)
         notes.set_note_ui(note.uuid, ui)
 
         handler = NoteHandler(ui, notes, note.uuid)
-
         builder.connect_signals(handler)
 
         return ui

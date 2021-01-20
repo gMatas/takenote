@@ -1,0 +1,24 @@
+window, text {
+  background-color: ${background_color};
+  font-family: ${font_family};
+  font-size: ${font_size};
+  color: ${text_color};
+  caret-color: ${text_color};
+}
+
+button {
+  background-image: none;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: rgba(0,0,0,0.2);
+  background-blend-mode: multiply;
+}
+
+button:hover:active {
+  background-color: rgba(0,0,0,0.4);
+  background-blend-mode: multiply;
+}
