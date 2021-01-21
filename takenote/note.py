@@ -40,6 +40,7 @@ class Note:
             uuid: str,
             content: str,
             pinmode: NotePinMode,
+            locked: bool,
             style: NoteStyle,
             position: Union[Position, Tuple[Any, Any]] = None,
             size: Union[Size, Tuple[Any, Any]] = None,
@@ -48,9 +49,10 @@ class Note:
         self._uuid = uuid
         self._content = content
         self._pinmode = pinmode
+        self._locked = locked
+        self._style = style
         self._position = position
         self._size = size
-        self._style = style
 
         self._save_required = save_required
         self._on_save_cb: Optional[Callable] = None
@@ -66,6 +68,10 @@ class Note:
     @property
     def pinmode(self) -> NotePinMode:
         return self._pinmode
+
+    @property
+    def locked(self) -> bool:
+        return self._locked
 
     @property
     def style(self) -> NoteStyle:
@@ -92,6 +98,11 @@ class Note:
     def pinmode(self, value: NotePinMode):
         self._save_required |= self._pinmode != value
         self._pinmode = value
+
+    @locked.setter
+    def locked(self, value: bool):
+        self._save_required |= self._locked != value
+        self._locked = value
 
     @style.setter
     def style(self, value: NoteStyle):
@@ -135,41 +146,44 @@ class Note:
             "uuid": self._uuid,
             "content": self._content,
             "pinmode": self._pinmode.name,
+            "locked": self._locked,
             "style": self._style.to_dict(),
-            "position": None if self._position is None else tuple(self._position),
-            "size": None if self._size is None else tuple(self._size)
+            "position": self._position,
+            "size": self._size
         }
 
         return note_dict
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "Note":        
+    def from_dict(cls, data: Dict) -> "Note":
         note = cls(
             uuid=data["uuid"],
             content=data["content"],
             pinmode=NotePinMode[data["pinmode"]],
+            locked=bool(data["locked"]),
             style=NoteStyle.from_dict(data["style"]),
-            position=_ if (_ := data["position"]) is None else Position(*_),
-            size=_ if (_ := data["size"]) is None else Size(*_), 
+            position=pos if (pos := data["position"]) is None else Position(*pos),
+            size=size if (size := data["size"]) is None else Size(*size),
             save_required=False
         )
 
         return note
 
-    @classmethod
-    def new(cls):
-        # TODO Make default values not hardcoded here!
-        note = cls(
-            uuid=str(uuid4()),
-            content="",
-            pinmode=NotePinMode.NONE,
-            style=NoteStyle(
-                background_color="pink",
-                font_family="inherit",
-                font_size="inherit",
-                text_color="black",
-            ),
-            save_required=True
-        )
 
-        return note
+def create_new_note() -> Note:
+    # TODO Make default values not hardcoded here!
+    note = Note(
+        uuid=str(uuid4()),
+        content="",
+        pinmode=NotePinMode.NONE,
+        locked=False,
+        style=NoteStyle(
+            background_color="pink",
+            font_family="inherit",
+            font_size="inherit",
+            text_color="black",
+        ),
+        save_required=True
+    )
+
+    return note

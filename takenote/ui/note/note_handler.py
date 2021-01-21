@@ -15,24 +15,27 @@ class NoteHandler:
 
     def __init__(
             self,
-            ui: NoteUI,
-            notes: NotesCollection,
             note_uuid: str,
+            notes: NotesCollection,
+            ui: NoteUI,
     ):
-        self._ui = ui
         self._note = notes.get_note(note_uuid)
         self._notes = notes
+        self._ui = ui
 
-        self._ui.move_window(self._note.position)
-        self._ui.resize_window(self._note.size)
+        ui.move_window(self._note.position)
+        ui.resize_window(self._note.size)
 
         # Load note UI with its text content.
-        self._text_buffer: Gtk.TextBuffer = self._ui.note_textview.get_buffer()
+        self._text_buffer: Gtk.TextBuffer = ui.note_textview.get_buffer()
         self._text_buffer.set_text(
-            self._note.content, 
-            len(self._note.content.encode('utf-8')))
+            self._note.content,
+            len(self._note.content.encode('utf-8'))
+        )
 
-        self._set_pinning_mode(self._ui.note_window, self._note.pinmode)
+        ui.note_textview.set_editable(not self._note.locked)
+
+        self._set_pinning_mode(ui.note_window, self._note.pinmode)
 
     def on_resize_eventbox_button_press_event(self, window: Gtk.Window, event: Gdk.EventButton):
         window.begin_resize_drag(
@@ -50,6 +53,10 @@ class NoteHandler:
             event.y_root,
             event.time
         )
+
+    def on_lock_button_clicked(self, textview: Gtk.TextView):
+        self._note.locked = not self._note.locked
+        textview.set_editable(not self._note.locked)
 
     def on_mode_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning_mode(window)
@@ -105,7 +112,7 @@ class NoteHandler:
         ui.set_style(style_provider)
         notes.set_note_ui(note.uuid, ui)
 
-        handler = NoteHandler(ui, notes, note.uuid)
+        handler = NoteHandler(note.uuid, notes, ui)
         builder.connect_signals(handler)
 
         return ui
