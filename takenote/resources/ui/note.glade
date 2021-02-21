@@ -4,9 +4,9 @@
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="note_window">
     <property name="name">note_window</property>
-    <property name="can_focus">False</property>
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
     <property name="window_position">center</property>
-    <property name="type_hint">utility</property>
     <property name="skip_pager_hint">True</property>
     <property name="focus_on_map">False</property>
     <property name="decorated">False</property>
@@ -31,12 +31,13 @@
                 <property name="receives_default">True</property>
                 <property name="relief">none</property>
                 <property name="image_position">right</property>
+                <signal name="clicked" handler="on_lock_button_clicked" object="note_textview" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="lock_button_icon">
                     <property name="name">lock_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">../icons/lock-24px.svg</property>
+                    <property name="icon_name">changes-allow-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -82,7 +83,7 @@
                     <property name="name">mode_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">../icons/flip_to_front-24px.svg</property>
+                    <property name="pixbuf">../icons/flip_to_back-24px.svg</property>
                   </object>
                 </child>
               </object>
@@ -106,7 +107,7 @@
                     <property name="name">pin_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">../icons/push_pin-24px.svg</property>
+                    <property name="icon_name">view-pin</property>
                   </object>
                 </child>
               </object>
@@ -130,7 +131,7 @@
                     <property name="name">more_button_icon</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">../icons/more_vert-24px.svg</property>
+                    <property name="icon_name">view-more-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -152,12 +153,12 @@
         <child>
           <object class="GtkTextView" id="note_textview">
             <property name="name">note_textview</property>
-            <property name="width_request">100</property>
-            <property name="height_request">100</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="margin_start">8</property>
             <property name="margin_end">8</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="wrap_mode">word</property>
             <signal name="focus-out-event" handler="on_note_textview_focus_out_event" swapped="no"/>
           </object>

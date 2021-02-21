@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional, Tuple
 
 from takenote.constants import NOTES_DATA_PATH
-from takenote.note import Note
+from takenote.note import Note, create_new_note
 from takenote.ui.note.note_ui import NoteUI
 from takenote.utils import read_json, write_json
 
@@ -27,7 +27,7 @@ class NotesCollection:
         return self._uis.get(uuid)
 
     def add_note(self, note: Note = None) -> Note:
-        note = note or Note.new()
+        note = note or create_new_note()
         note.set_callbacks(on_save=(lambda: self.save(NOTES_DATA_PATH)))
 
         # Check if note UUID is unique. UUID collisions are in no
