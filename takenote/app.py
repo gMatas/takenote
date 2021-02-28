@@ -1,13 +1,14 @@
 import os
 from typing import Optional
 
-from takenote.constants import APPINDICATOR_ID, NOTES_DATA_PATH
+from takenote.constants import APPINDICATOR_ID
+from takenote.context import TakenoteContext
 from takenote.gi_repository import GIRepository
-from takenote.notes_collection import NotesCollection
 from takenote.ui.indicator import create_indicator
 
 AppIndicator3 = GIRepository.AppIndicator3.load_binding()
 Gtk = GIRepository.Gtk.load_binding()
+Gdk = GIRepository.Gdk.load_binding()
 
 
 class TakenoteApp:
@@ -21,14 +22,11 @@ class TakenoteApp:
         instance = object.__new__(cls)
         cls._instance = instance
 
-        instance._notes = (
-            NotesCollection.load(NOTES_DATA_PATH)
-            if os.path.exists(NOTES_DATA_PATH)
-            else NotesCollection()
-        )
+        context = TakenoteContext()
+
         instance._indicator_id = APPINDICATOR_ID
         instance._indicator = create_indicator(
-            instance._indicator_id, instance._notes)
+            context, instance._indicator_id)
 
         return cls._instance
 
