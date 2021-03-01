@@ -1,5 +1,6 @@
+from takenote.context import TakenoteContext
 from takenote.gi_repository import GIRepository
-from takenote.notes_collection import NotesCollection
+from takenote.icon_theme import TakenoteIcon
 from takenote.resources.css import CSSResource
 from takenote.resources.ui import UIResource
 from takenote.ui.note.note_pin_mode import NotePinMode
@@ -15,12 +16,12 @@ class NoteHandler:
 
     def __init__(
             self,
+            context: TakenoteContext,
             note_uuid: str,
-            notes: NotesCollection,
             ui: NoteUI,
     ):
-        self._note = notes.get_note(note_uuid)
-        self._notes = notes
+        self._note = context.notes.get_note(note_uuid)
+        self._context = context
         self._ui = ui
 
         ui.move_window(self._note.position)
@@ -36,6 +37,7 @@ class NoteHandler:
         ui.note_textview.set_editable(not self._note.locked)
 
         self._set_pinning_mode(ui.note_window, self._note.pinmode)
+        self._update_lock_icon()
 
     def on_resize_eventbox_button_press_event(self, window: Gtk.Window, event: Gdk.EventButton):
         window.begin_resize_drag(
@@ -57,6 +59,7 @@ class NoteHandler:
     def on_lock_button_clicked(self, textview: Gtk.TextView):
         self._note.locked = not self._note.locked
         textview.set_editable(not self._note.locked)
+        self._update_lock_icon()
 
     def on_mode_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning_mode(window)
@@ -81,16 +84,16 @@ class NoteHandler:
         self._note.save()
 
     def on_new_button_clicked(self, button: Gtk.Button):
-        note = self._notes.add_note()
+        note = self._context.notes.add_note()
         ui = NoteHandler.attach_ui(self._notes, note.uuid)
         ui.show()
 
     def on_delete_button_clicked(self, window: Gtk.Window):
-        self._notes.remove_note(self._note.uuid)
+        self._context.notes.remove_note(self._note.uuid)
         window.close()
 
     def on_close_button_clicked(self, window: Gtk.Window):
-        self._notes.set_note_ui(self._note.uuid, None)
+        self._context.notes.set_note_ui(self._note.uuid, None)
         self._note.save()
         window.close()
 
@@ -99,10 +102,10 @@ class NoteHandler:
         popovermenu.popup()
 
     @staticmethod
-    def attach_ui(notes: NotesCollection, note_uuid: str) -> NoteUI:
+    def attach_ui(context: TakenoteContext, note_uuid: str) -> NoteUI:
         builder = Gtk.Builder.new_from_file(UIResource.NOTE_WINDOW.get_filename())
 
-        note = notes.get_note(note_uuid)
+        note = context.notes.get_note(note_uuid)
         css_string = note._style.fill_css_template(
             CSSResource.TEMPLATE_NOTE_STYLE.get_filename())
 
@@ -110,12 +113,23 @@ class NoteHandler:
         style_provider.load_from_data(css_string.encode("utf-8"))
         ui = NoteUI.from_builder(builder)
         ui.set_style(style_provider)
-        notes.set_note_ui(note.uuid, ui)
+        context.notes.set_note_ui(note.uuid, ui)
 
-        handler = NoteHandler(note.uuid, notes, ui)
+        handler = NoteHandler(context, note.uuid, ui)
         builder.connect_signals(handler)
 
         return ui
+
+    def _update_lock_icon(self):
+        image = self._ui.lock_button.get_image()
+        if not image:
+            image = Gtk.Image.new()
+            self._ui.lock_button.set_image(image)
+        
+        icon = TakenoteIcon.LOCK_ENABLED if self._note.locked else TakenoteIcon.LOCK_DISABLED
+        self._context.icon_theme.set_screen(Gdk.Screen.get_default())
+        pixbuf = self._context.icon_theme.load_icon(icon.value, 16, 0)
+        image.set_from_pixbuf(pixbuf)
 
     def _toggle_pinning(self, window: Gtk.Window):
         self._note.pinmode = (

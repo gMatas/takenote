@@ -1,44 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="note_window">
     <property name="name">note_window</property>
     <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="window_position">center</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="focus_on_map">False</property>
+    <property name="can-focus">True</property>
+    <property name="window-position">center</property>
+    <property name="skip-pager-hint">True</property>
+    <property name="focus-on-map">False</property>
     <property name="decorated">False</property>
     <property name="deletable">False</property>
     <child>
       <object class="GtkBox" id="main_box">
         <property name="name">main_box</property>
         <property name="visible">True</property>
-        <property name="app_paintable">True</property>
-        <property name="can_focus">False</property>
+        <property name="app-paintable">True</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox" id="header_box">
             <property name="name">header_box</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkButton" id="lock_button">
                 <property name="name">lock_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">True</property>
                 <property name="relief">none</property>
-                <property name="image_position">right</property>
+                <property name="image-position">right</property>
                 <signal name="clicked" handler="on_lock_button_clicked" object="note_textview" swapped="no"/>
                 <child>
-                  <object class="GtkImage" id="lock_button_icon">
-                    <property name="name">lock_button_icon</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">changes-allow-symbolic</property>
-                  </object>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -51,11 +46,11 @@
             <child>
               <object class="GtkButton" id="move_button">
                 <property name="name">move_button</property>
-                <property name="width_request">100</property>
+                <property name="width-request">100</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">False</property>
+                <property name="focus-on-click">False</property>
+                <property name="receives-default">True</property>
                 <property name="opacity">0</property>
                 <property name="hexpand">False</property>
                 <property name="relief">none</property>
@@ -74,17 +69,12 @@
               <object class="GtkButton" id="mode_button">
                 <property name="name">mode_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">True</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_mode_button_clicked" object="note_window" swapped="no"/>
                 <child>
-                  <object class="GtkImage" id="mode_button_icon">
-                    <property name="name">mode_button_icon</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="pixbuf">../icons/flip_to_back-24px.svg</property>
-                  </object>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -98,16 +88,16 @@
               <object class="GtkButton" id="pin_button">
                 <property name="name">pin_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">True</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_pin_button_clicked" object="note_window" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="pin_button_icon">
                     <property name="name">pin_button_icon</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">view-pin</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">view-pin</property>
                   </object>
                 </child>
               </object>
@@ -122,16 +112,16 @@
               <object class="GtkButton" id="more_button">
                 <property name="name">more_button</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">True</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_more_button_clicked" object="more_popovermenu" after="yes" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="more_button_icon">
                     <property name="name">more_button_icon</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">view-more-symbolic</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">view-more-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -154,12 +144,12 @@
           <object class="GtkTextView" id="note_textview">
             <property name="name">note_textview</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="margin_start">8</property>
-            <property name="margin_end">8</property>
+            <property name="can-focus">True</property>
+            <property name="margin-start">8</property>
+            <property name="margin-end">8</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="wrap_mode">word</property>
+            <property name="wrap-mode">word</property>
             <signal name="focus-out-event" handler="on_note_textview_focus_out_event" swapped="no"/>
           </object>
           <packing>
@@ -172,7 +162,7 @@
           <object class="GtkBox" id="footer_box">
             <property name="name">footer_box</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <placeholder/>
             </child>
@@ -180,20 +170,20 @@
               <object class="GtkEventBox" id="resize_eventbox">
                 <property name="name">resize_eventbox</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="valign">end</property>
-                <property name="above_child">True</property>
+                <property name="above-child">True</property>
                 <signal name="button-press-event" handler="on_resize_eventbox_button_press_event" object="note_window" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="resize_icon">
                     <property name="name">resize_icon</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_start">2</property>
-                    <property name="margin_end">2</property>
-                    <property name="margin_top">2</property>
-                    <property name="margin_bottom">2</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">2</property>
+                    <property name="margin-end">2</property>
+                    <property name="margin-top">2</property>
+                    <property name="margin-bottom">2</property>
                     <property name="pixbuf">../icons/corner.svg</property>
                   </object>
                 </child>
@@ -202,7 +192,7 @@
                 <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="padding">2</property>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -216,25 +206,22 @@
         </child>
       </object>
     </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkPopoverMenu" id="more_popovermenu">
-    <property name="can_focus">False</property>
-    <property name="relative_to">more_button</property>
+    <property name="can-focus">False</property>
+    <property name="relative-to">more_button</property>
     <property name="position">bottom</property>
-    <property name="constrain_to">none</property>
+    <property name="constrain-to">none</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkModelButton" id="new_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="text" translatable="yes">New</property>
             <signal name="clicked" handler="on_new_button_clicked" object="note_window" swapped="no"/>
           </object>
@@ -247,8 +234,8 @@
         <child>
           <object class="GtkModelButton" id="settings_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="text" translatable="yes">Settings</property>
           </object>
           <packing>
@@ -260,8 +247,8 @@
         <child>
           <object class="GtkModelButton" id="delete_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="text" translatable="yes">Delete</property>
             <signal name="clicked" handler="on_delete_button_clicked" object="note_window" swapped="no"/>
           </object>
@@ -274,8 +261,8 @@
         <child>
           <object class="GtkModelButton" id="close_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="text" translatable="yes">Close</property>
             <signal name="clicked" handler="on_close_button_clicked" object="note_window" swapped="no"/>
           </object>

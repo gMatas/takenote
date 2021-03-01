@@ -1,5 +1,6 @@
 from typing import Callable, Dict
 
+from takenote.context import TakenoteContext
 from takenote.gi_repository import GIRepository
 from takenote.notes_collection import NotesCollection
 from takenote.ui.note.note_handler import NoteHandler
@@ -8,15 +9,15 @@ AppIndicator3 = GIRepository.AppIndicator3.load_binding()
 Gtk = GIRepository.Gtk.load_binding()
 
 
-def create_indicator(indicator_id: str, notes: NotesCollection):
+def create_indicator(ctx: TakenoteContext, indicator_id: str):
     
     def _on_create_new_note(*args, **kwargs):
-        note = notes.add_note()
-        _show_note_ui(notes, note.uuid)
+        note = ctx.notes.add_note()
+        _show_note_ui(ctx, note.uuid)
 
     def _on_show_all_notes(*args, **kwargs):
-        for note_uuid in notes.uuids:
-            _show_note_ui(notes, note_uuid)
+        for note_uuid in ctx.notes.uuids:
+            _show_note_ui(ctx, note_uuid)
 
     def _on_open_settings(*args, **kwargs):
         print("indicator: settings")
@@ -48,11 +49,11 @@ def create_indicator(indicator_id: str, notes: NotesCollection):
     return indicator
 
 
-def _show_note_ui(notes: NotesCollection, note_uuid: str):
-    if notes.get_note_ui(note_uuid):
+def _show_note_ui(ctx: TakenoteContext, note_uuid: str):
+    if ctx.notes.get_note_ui(note_uuid):
         return
     
-    note_ui = NoteHandler.attach_ui(notes, note_uuid)
+    note_ui = NoteHandler.attach_ui(ctx, note_uuid)
     note_ui.show()
 
 

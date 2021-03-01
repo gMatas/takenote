@@ -1,16 +1,15 @@
-import enum
+from enum import Enum
 
 from takenote.gi_repository import GIRepository
-
 
 Gdk = GIRepository.Gdk.load_binding()
 
 
-class NotePinMode(enum.Enum):
+class NotePinMode(Enum):
 
+    NONE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.NORMAL
     ABOVE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.DOCK
     BELOW: Gdk.WindowTypeHint = Gdk.WindowTypeHint.DESKTOP
-    NONE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.NORMAL
 
     @property
     def ispinned(self) -> bool:
