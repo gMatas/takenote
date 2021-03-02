@@ -93,12 +93,7 @@
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_pin_button_clicked" object="note_window" swapped="no"/>
                 <child>
-                  <object class="GtkImage" id="pin_button_icon">
-                    <property name="name">pin_button_icon</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">view-pin</property>
-                  </object>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -117,12 +112,7 @@
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_more_button_clicked" object="more_popovermenu" after="yes" swapped="no"/>
                 <child>
-                  <object class="GtkImage" id="more_button_icon">
-                    <property name="name">more_button_icon</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">view-more-symbolic</property>
-                  </object>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -176,15 +166,10 @@
                 <property name="above-child">True</property>
                 <signal name="button-press-event" handler="on_resize_eventbox_button_press_event" object="note_window" swapped="no"/>
                 <child>
-                  <object class="GtkImage" id="resize_icon">
-                    <property name="name">resize_icon</property>
+                  <object class="GtkImage">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">2</property>
-                    <property name="margin-end">2</property>
-                    <property name="margin-top">2</property>
-                    <property name="margin-bottom">2</property>
-                    <property name="pixbuf">../icons/corner.svg</property>
+                    <property name="pixbuf">../../../resources/images/corner2.svg</property>
                   </object>
                 </child>
               </object>

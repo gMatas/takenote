@@ -31,12 +31,17 @@ class NoteHandler:
         self._text_buffer: Gtk.TextBuffer = ui.note_textview.get_buffer()
         self._text_buffer.set_text(
             self._note.content,
-            len(self._note.content.encode('utf-8'))
+            len(self._note.content.encode("utf-8"))
         )
 
         ui.note_textview.set_editable(not self._note.locked)
+        
+        # Default static icons.
+        self._set_button_icon(ui.pin_button, TakenoteIcon.PUSH_PIN)
+        self._set_button_icon(ui.more_button, TakenoteIcon.VIEW_MORE)
 
-        self._set_pinning_mode(ui.note_window, self._note.pinmode)
+        # Default dynamic icons.
+        self._set_pinning_mode(ui.note_window)
         self._update_lock_icon()
 
     def on_resize_eventbox_button_press_event(self, window: Gtk.Window, event: Gdk.EventButton):
@@ -85,7 +90,7 @@ class NoteHandler:
 
     def on_new_button_clicked(self, button: Gtk.Button):
         note = self._context.notes.add_note()
-        ui = NoteHandler.attach_ui(self._notes, note.uuid)
+        ui = NoteHandler.attach_ui(self._context, note.uuid)
         ui.show()
 
     def on_delete_button_clicked(self, window: Gtk.Window):
@@ -119,18 +124,7 @@ class NoteHandler:
         builder.connect_signals(handler)
 
         return ui
-
-    def _update_lock_icon(self):
-        image = self._ui.lock_button.get_image()
-        if not image:
-            image = Gtk.Image.new()
-            self._ui.lock_button.set_image(image)
         
-        icon = TakenoteIcon.LOCK_ENABLED if self._note.locked else TakenoteIcon.LOCK_DISABLED
-        self._context.icon_theme.set_screen(Gdk.Screen.get_default())
-        pixbuf = self._context.icon_theme.load_icon(icon.value, 16, 0)
-        image.set_from_pixbuf(pixbuf)
-
     def _toggle_pinning(self, window: Gtk.Window):
         self._note.pinmode = (
             NotePinMode.NONE
@@ -138,7 +132,7 @@ class NoteHandler:
             else NoteHandler.DEFAULT_PINMODE
         )
 
-        self._set_pinning_mode(window, self._note.pinmode)
+        self._set_pinning_mode(window)
 
     def _toggle_pinning_mode(self, window: Gtk.Window):
         # Toggle pinning mode.
@@ -149,13 +143,36 @@ class NoteHandler:
         )
 
         if self._note.pinmode.ispinned:
-            self._set_pinning_mode(window, self._note.pinmode)
+            self._set_pinning_mode(window)
 
-    def _set_pinning_mode(self, window: Gtk.Window, pinmode: NotePinMode):
-        type_hint = pinmode.gtk_window_typehint
+    def _set_pinning_mode(self, window: Gtk.Window):
+        type_hint = self._note.pinmode.gtk_window_typehint
         window.set_type_hint(type_hint)
 
-        is_pinned = pinmode.ispinned
+        is_pinned = self._note.pinmode.ispinned
         self._ui.move_button.set_sensitive(not is_pinned)
         self._ui.resize_eventbox.set_visible(not is_pinned)
         self._ui.mode_button.set_visible(is_pinned)
+        self._update_pinmode_icon()
+
+    def _set_button_icon(self, button: Gtk.Button, icon: TakenoteIcon):
+        image = button.get_image()
+        if not image:
+            image = Gtk.Image.new()
+            button.set_image(image)
+
+        self._context.icon_theme.set_screen(Gdk.Screen.get_default())
+        pixbuf = self._context.icon_theme.load_icon(icon.value, 16, 0)
+        image.set_from_pixbuf(pixbuf)
+
+    def _update_pinmode_icon(self):       
+        icon = {
+            NotePinMode.ABOVE: TakenoteIcon.FLIP_TO_FRONT,
+            NotePinMode.BELOW: TakenoteIcon.FLIP_TO_BACK
+        }.get(self._note.pinmode)
+        if icon:
+            self._set_button_icon(self._ui.mode_button, icon)
+
+    def _update_lock_icon(self):
+        icon = TakenoteIcon.LOCK_ENABLED if self._note.locked else TakenoteIcon.LOCK_DISABLED
+        self._set_button_icon(self._ui.lock_button, icon)
