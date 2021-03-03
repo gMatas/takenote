@@ -23,10 +23,9 @@ class TakenoteApp:
         cls._instance = instance
 
         context = TakenoteContext()
-
+        
+        instance._indicator = create_indicator(context, APPINDICATOR_ID)
         instance._indicator_id = APPINDICATOR_ID
-        instance._indicator = create_indicator(
-            context, instance._indicator_id)
 
         return cls._instance
 
