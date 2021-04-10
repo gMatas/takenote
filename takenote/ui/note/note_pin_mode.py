@@ -1,13 +1,11 @@
 from enum import Enum
 
-from takenote.gi_repository import GIRepository
-
-Gdk = GIRepository.Gdk.load_binding()
+from gi.repository import Gdk
 
 
 class NotePinMode(Enum):
 
-    NONE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.NORMAL
+    NONE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.UTILITY
     ABOVE: Gdk.WindowTypeHint = Gdk.WindowTypeHint.DOCK
     BELOW: Gdk.WindowTypeHint = Gdk.WindowTypeHint.DESKTOP
 

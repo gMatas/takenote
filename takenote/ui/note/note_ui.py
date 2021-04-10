@@ -1,11 +1,9 @@
 from dataclasses import dataclass
 from typing import List
 
-from takenote.gi_repository import GIRepository
-from takenote.utils import Position, Size
+from gi.repository import Gtk
 
-Gdk = GIRepository.Gdk.load_binding()
-Gtk = GIRepository.Gtk.load_binding()
+from takenote.utils import Position, Size
 
 
 @dataclass(frozen=True)
@@ -19,6 +17,7 @@ class NoteUI:
     pin_button: Gtk.Button
     more_button: Gtk.Button
     resize_eventbox: Gtk.EventBox
+    more_popovermenu: Gtk.PopoverMenu
 
     @classmethod
     def from_builder(cls, builder: Gtk.Builder):
