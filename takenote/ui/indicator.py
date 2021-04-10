@@ -1,12 +1,9 @@
 from typing import Callable, Dict
 
-from takenote.context import TakenoteContext
-from takenote.gi_repository import GIRepository
-from takenote.notes_collection import NotesCollection
-from takenote.ui.note.note_handler import NoteHandler
+from gi.repository import AppIndicator3, Gtk 
 
-AppIndicator3 = GIRepository.AppIndicator3.load_binding()
-Gtk = GIRepository.Gtk.load_binding()
+from takenote.context import TakenoteContext
+from takenote.ui.note.note_handler import NoteHandler
 
 
 def create_indicator(ctx: TakenoteContext, indicator_id: str):

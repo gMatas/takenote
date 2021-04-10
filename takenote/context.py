@@ -1,10 +1,9 @@
 import os
 
-from takenote.constants import ICONS_PATH, ICONS_THEME_NAME, NOTES_DATA_PATH
-from takenote.gi_repository import GIRepository
-from takenote.notes_collection import NotesCollection
+from gi.repository import Gtk
 
-Gtk = GIRepository.Gtk.load_binding()
+from takenote.constants import ICONS_PATH, ICONS_THEME_NAME, NOTES_DATA_PATH
+from takenote.notes_collection import NotesCollection
 
 
 class TakenoteContext:

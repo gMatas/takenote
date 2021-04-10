@@ -1,8 +1,6 @@
-from takenote.gi_repository import GIRepository
+from gi.repository import Gtk
+
 from takenote.resources.ui import UIResource
-
-
-Gtk = GIRepository.Gtk.load_binding()
 
 
 class Settings:

@@ -1,13 +1,11 @@
+from gi.repository import Gdk, Gtk
+
 from takenote.context import TakenoteContext
-from takenote.gi_repository import GIRepository
 from takenote.icon_theme import TakenoteIcon
 from takenote.resources.css import CSSResource
 from takenote.resources.ui import UIResource
 from takenote.ui.note.note_pin_mode import NotePinMode
 from takenote.ui.note.note_ui import NoteUI
-
-Gdk = GIRepository.Gdk.load_binding()
-Gtk = GIRepository.Gtk.load_binding()
 
 
 class NoteHandler:
@@ -35,6 +33,7 @@ class NoteHandler:
         )
 
         ui.note_textview.set_editable(not self._note.locked)
+        ui.note_textview.set_cursor_visible(not self._note.locked)
         
         # Default static icons.
         self._set_button_icon(ui.pin_button, TakenoteIcon.PUSH_PIN)
@@ -64,30 +63,32 @@ class NoteHandler:
     def on_lock_button_clicked(self, textview: Gtk.TextView):
         self._note.locked = not self._note.locked
         textview.set_editable(not self._note.locked)
+        textview.set_cursor_visible(not self._note.locked)
         self._update_lock_icon()
-
+        
     def on_mode_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning_mode(window)
 
     def on_pin_button_clicked(self, window: Gtk.Window):
         self._toggle_pinning(window)
 
+    def on_note_window_button_press_event(self, widget, event):
+        # print('window event: button press')
+        self._ui.note_window.present()
+        # return True
+
+    def on_note_window_focus_out_event(self, widget, event):
+        self._ui.more_popovermenu.popdown()
+
+    def on_note_textview_focus_in_event(self, widget: Gtk.Widget, event: Gdk.EventFocus):
+        if not self._note.locked:
+            self._ui.note_textview.set_cursor_visible(True)
+
     def on_note_textview_focus_out_event(self, widget: Gtk.Widget, event: Gdk.EventFocus):
-        text = self._text_buffer.get_text(
-            start=self._text_buffer.get_start_iter(),
-            end=self._text_buffer.get_end_iter(),
-            include_hidden_chars=False
-        )
-
-        root_x, root_y = self._ui.note_window.get_position()
-        width, height = self._ui.note_window.get_size()
-
-        self._note.content = text
-        self._note.pinmode = self._note.pinmode
-        self._note.set_position(root_x, root_y)
-        self._note.set_size(height, width)
-        self._note.save()
-
+        self._update_note()
+        if not self._note.locked:
+            self._ui.note_textview.set_cursor_visible(False)
+        
     def on_new_button_clicked(self, button: Gtk.Button):
         note = self._context.notes.add_note()
         ui = NoteHandler.attach_ui(self._context, note.uuid)
@@ -102,8 +103,8 @@ class NoteHandler:
         self._note.save()
         window.close()
 
-    @staticmethod
-    def on_more_button_clicked(popovermenu: Gtk.PopoverMenu):
+    def on_more_button_clicked(self, popovermenu: Gtk.PopoverMenu):
+        self._ui.note_window.present()
         popovermenu.popup()
 
     @staticmethod
@@ -176,3 +177,18 @@ class NoteHandler:
     def _update_lock_icon(self):
         icon = TakenoteIcon.LOCK_ENABLED if self._note.locked else TakenoteIcon.LOCK_DISABLED
         self._set_button_icon(self._ui.lock_button, icon)
+
+    def _update_note(self):
+        root_x, root_y = self._ui.note_window.get_position()
+        width, height = self._ui.note_window.get_size()
+        text = self._text_buffer.get_text(
+            start=self._text_buffer.get_start_iter(),
+            end=self._text_buffer.get_end_iter(),
+            include_hidden_chars=False
+        )
+
+        self._note.content = text
+        self._note.pinmode = self._note.pinmode
+        self._note.set_position(root_x, root_y)
+        self._note.set_size(height, width)
+        self._note.save()

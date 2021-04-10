@@ -1,14 +1,10 @@
-import os
 from typing import Optional
+
+from gi.repository import Gtk
 
 from takenote.constants import APPINDICATOR_ID
 from takenote.context import TakenoteContext
-from takenote.gi_repository import GIRepository
 from takenote.ui.indicator import create_indicator
-
-AppIndicator3 = GIRepository.AppIndicator3.load_binding()
-Gtk = GIRepository.Gtk.load_binding()
-Gdk = GIRepository.Gdk.load_binding()
 
 
 class TakenoteApp:
